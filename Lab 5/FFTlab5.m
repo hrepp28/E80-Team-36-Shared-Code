@@ -1,17 +1,22 @@
 %Load in file from data 
-load('') %add file name
+data = readmatrix(''); %add file name
 
-Xk = ? 
-Fs = ?
+t = data( :,1); % check to see which row is which and switch if swapped, this is just coppied from the pigeon hw:)
+Xk = data( :,2);
+Fs = 1/(t(2)-t(1));
 N = length(Xk);
-f= Fs/N; 
 
-v= -N/2:(N/2)-1;
-k = f*v;
+w = hann(N); 
+Xw = Xk.*w; 
 
-Y = fft(Xk)/N; 
-%fft centered around zero
-Y2 = fftshift(Y);
-%take absolute value for magnitude
-Y2abs = abs(Y2); 
-figure(1); stem(k,Y2); xlabel('K'); ylabel('|X[k]|'); title('Magnitude of X[k] vs K')
+[X, f] = fdomain(Xw, Fs);
+%take abs value for magnitude
+Xabs = abs(X);
+
+figure(1)
+plot(f, Xabs)
+xlabel('Frequency [Hz]')
+ylabel('|X(f)|')
+title('FFT with Hanning Window')
+%only show 0-100kHz
+xlim([0 100*10^3])
