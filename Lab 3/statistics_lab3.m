@@ -1,5 +1,5 @@
-x = [7.5 4 6 5 8]; % Uncomment and add your own data
-y = [3.70 3.10 3.32 2.98 3.68]; % Uncomment and add your own data
+x = [857 707 499 393 257]; % Uncomment and add your own data
+y = [0.3709677419 0.306779661 0.2032520325 0.125 0.0896]; % Uncomment and add your own data
 confLev = 0.8;
 N = length(y);
 xbar = mean(x);
