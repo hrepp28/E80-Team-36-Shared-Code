@@ -1,13 +1,16 @@
-x = [857 707 499 393 257]; % Uncomment and add your own data
-y = [0.3709677419 0.306779661 0.2032520325 0.125 0.0896]; % Uncomment and add your own data
-confLev = 0.8;
+x = [0.3709677419 0.306779661 0.2032520325 0.125 0.0896]; % Uncomment and add your own data
+y = [857 707 499 393 257]; % Uncomment and add your own data
+% voltage ratio = 0.0004916007(turbidity in tpu) - 0.04762265
+% turbidity in tpu = 2011.651(v90/v180) + 101.8072
+% 0.0004464639(30)-0.01927617
+confLev = 0.95;
 N = length(y);
 xbar = mean(x);
 ybar = mean(y);
 Sxx = (x-xbar)*transpose(x-xbar);
 beta1 = ((x-xbar)*transpose(x-xbar))/Sxx; %line of best fit
 beta0= ybar-beta1*xbar;
-yfit = beta0 + beta1*x;
+yfit = beta0 + beta1*x
 SSE = (y-yfit)*transpose(y-yfit);
 Se = sqrt(SSE/(N-2));
 Sbeta0 = (Se*sqrt(1/N+xbar^2/Sxx));
@@ -31,14 +34,14 @@ plot(xplot,yplot+lambdayhat,'-.b',xplot,yplot-lambdayhat,'-.b')
 plot(xplot,yplot+lambday,'--m',xplot,yplot-lambday,'--m')
 xlabel('Independent Variable')
 ylabel('Dependent Variable')
-if beta1 > 0 % Fix this
-    location = 'northwest';
-else
-    location = 'northeast';
-end
+% if beta1 > 0 % Fix this
+%     location = 'northwest';
+% else
+%     location = 'northeast';
+% end
 legend('Data Points','Best Fit Line','Upper Func. Bound',...
-    'Lower Func. Bound', 'Upper Obs. Bound', 'Lower Obs. Bound',...
-    'Location', location)
+    'Lower Func. Bound', 'Upper Obs. Bound', 'Lower Obs. Bound')
+    %'Location', location)
 hold off
 
 
