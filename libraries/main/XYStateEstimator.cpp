@@ -23,16 +23,18 @@ void XYStateEstimator::updateState(imu_state_t * imu_state_p, gps_state_t * gps_
   if (gps_state_p->num_sat >= N_SATS_THRESHOLD){
     gpsAcquired = 1;
 
+    float currentX = gps_state_p -> lon;
+    float currentY = gps_state_p -> lat;
+
     // set the values of state.x, state.y, and state.yaw
     // It can make use of the constants RADIUS_OF_EARTH, origin_lat, origin_lon (see XYStateEstimator.h)
     // You can access the current GPS latitude and longitude readings with gps_state_p->lat and gps_state_p->lon
     // You can access the current imu heading with imu_state_p->heading
     // Also note that math.h is already included so you have access to trig functions [rad]
-
-    ///////////////////////////////////////////////////////////////////
-    // INSERT YAW, X and Y CALCULATION HERE
-    //////////////////////////////////////////////////////////////////
-
+    state.x = RADIUS_OF_EARTH_M * (currentX - origin_lon) * cos(origin_lat);
+    state.y = RADIUS_OF_EARTH_M * (currentY - origin_lat);
+    state.yaw = (imu_state_p->heading - 90) * (-1);
+  
   }
   else{
     gpsAcquired = 0;
