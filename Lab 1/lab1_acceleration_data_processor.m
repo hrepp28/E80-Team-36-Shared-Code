@@ -47,15 +47,20 @@ for i=1:numel(varTypes)
 end
 fclose(fid);
 
+accelX_n = accelX(80:end);
+accelY_n = accelY(80:end);
+accelZ_n = accelZ(80:end);
+
+time_s = [0: length(accelX_n)-1].*1
 %% Plot the acceleration data, overlaying each direction
 figure
 hold on
-plot(accelX./99.03, 'Blue') % Scale the data to represent m/s^2
-plot(accelY./99.03, 'Red')
-plot(accelZ./99.03, 'Green')
+plot(time_s, accelX_n./99.03, 'Blue') % Scale the data to represent m/s^2
+plot(time_s,accelY_n./99.03, 'Red')
+plot(time_s,accelZ_n./99.03, 'Green')
 hold off
 title('Tank Room Robot Acceleration in X, Y, Z Directions')
-xlabel('Sample Index Number')
+xlabel('Time (s)')
 ylabel('Acceleration (m/s^2)')
 legend('X acceleration', 'Y acceleration', 'Z acceleration')
-xlim([68 102])
+
