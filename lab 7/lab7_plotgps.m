@@ -3,10 +3,18 @@ clf
 
 %load image 
 parsons = imread('GPS_test_2.png'); 
-pim = image(parsons);
+pim = imshow(parsons);
 
-ylabel('Y Coordinate')
-xlabel('X Coordinate')
+spatialExtentIm= [pim.XData; pim.YData]; 
+
+RI = imref2d(size(parsons)); 
+RI.XWorldLimits = [-47 224];
+RI.YWorldLimits = [-55 67];
+
+href = imshow(parsons, RI);
+
+ylabel('Y Position [m]')
+xlabel('X Position [m]')
 title('X,Y Position Over Map of Path Traveled')
 
 hold on 
