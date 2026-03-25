@@ -5,6 +5,10 @@ clf
 parsons = imread('GPS_test_2.png'); 
 pim = image(parsons);
 
+ylabel('Y Coordinate')
+xlabel('X Coordinate')
+title('X,Y Position Over Map of Path Traveled')
+
 hold on 
 
 %read files 
@@ -18,9 +22,6 @@ y = xydata( :,2);
 
 scatter(x,y,'green', LineWidth= 3)
 
-ylabel('Y Position [m]')
-xlabel('X Position [m]')
-title('X,Y Position Over Map of Path Traveled')
 
 
 
