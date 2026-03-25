@@ -35,7 +35,7 @@ u = datafile( :,4);
 
 
 % Setting Time Scale
-snum = length(datafile)
+snum = length(datafile);
 Tsamp = #;
 t = Tsamp*snum;
 
