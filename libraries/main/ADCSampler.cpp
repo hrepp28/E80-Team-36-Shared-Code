@@ -4,8 +4,8 @@
 extern Printer printer;
 
 ADCSampler::ADCSampler(void) 
-  : DataSource("Current_Sense,A00,A01,A02,A03,A10,A11,A12,A13",
-               "int,int,int,int,int,int,int,int,int") // from DataSource
+  : DataSource("A00,A01,A02,A03",
+               "int,int,int,int") // from DataSource
 {}
 
 void ADCSampler::init(void)
@@ -32,7 +32,9 @@ String ADCSampler::printSample(void)
   String printString = "ADC:";
   for (int i=0; i<NUM_PINS; i++) {
     printString += " ";
-    printString += String(sample[i]);
+    float printVal = sample[i]*3.3/1024;
+    printString += String(printVal);
+    // printString += String(sample[i]);
   }
   return printString;
 }

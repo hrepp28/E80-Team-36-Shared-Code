@@ -9,7 +9,7 @@ inline float angleDiff(float a) {
 }
 
 SurfaceControl::SurfaceControl(void) 
-: DataSource("u,uL,uR,yaw,yaw_des","float,float,float,float,float"){}
+: DataSource("uA,uB,uC,yaw,yaw_des","float,float,float,float,float"){}
 
 
 void SurfaceControl::init(const int totalWayPoints_in, double * wayPoints_in, int navigateDelay_in) {
@@ -38,32 +38,38 @@ void SurfaceControl::navigate(xy_state_t * state, gps_state_t * gps_state_p, int
     if (currentWayPoint == totalWayPoints) return; // stops motors at final surface point
     
     if (atPoint || delayed) {
-      uL = 0; 
-      uR = 0;
+      uA = 0; 
+      uB = 0;
+      uC = 0;
       return; // stops motors at surface waypoint
     }
 
     // set up variables
-    int x_des = getWayPoint(0);
-    int y_des = getWayPoint(1);
+    // int x_des = getWayPoint(0);
+    // int y_des = getWayPoint(1);
+
+    // control uA, uB, uC, turn motors on to 80 if not at way point, stop at way point
+    uA = 80;
+    uB = 80;
+    uC = 80;
 
     // Set the values of yaw_des, yaw, yaw_error, control effort (u), uL, and uR appropriately for P control
     // You can use trig functions (atan2 might be useful)
     // You can access the x and y coordinates calculated in XYStateEstimator.cpp using state->x and state->y respectively
     // You can access the yaw calculated in XYStateEstimator.cpp using state->yaw
 
-    float yaw_des = atan2(y_des - state->y, x_des - state->x);
-    float yaw_error = angleDiff(yaw_des - state->yaw);
-    float u = Kp*yaw_error;
-    float uR = avgPower + u;
-    float uL = avgPower - u;
-    ///////////////////////////////////////////////////////////
-    // INSERT P CONTROL CODE HERE
-    uR = uR*Kr;
-    uL = uL*Kl;
-    uR = min(127, max(0, uR));
-    uL = min(127, max(0, uL));
-    ///////////////////////////////////////////////////////////
+    // float yaw_des = atan2(y_des - state->y, x_des - state->x);
+    // float yaw_error = angleDiff(yaw_des - state->yaw);
+    // float u = Kp*yaw_error;
+    // float uR = avgPower + u;
+    // float uL = avgPower - u;
+    // ///////////////////////////////////////////////////////////
+    // // INSERT P CONTROL CODE HERE
+    // uR = uR*Kr;
+    // uL = uL*Kl;
+    // uR = min(127, max(0, uR));
+    // uL = min(127, max(0, uL));
+    // ///////////////////////////////////////////////////////////
 
     
   }
@@ -89,12 +95,12 @@ String SurfaceControl::printString(void) {
     printString += "Yaw: ";
     printString += String(yaw*180.0/PI);
     printString += "[deg], ";
-    printString += "u: ";
-    printString += String(u);
-    printString += ", u_L: ";
-    printString += String(uL);
-    printString += ", u_R: ";
-    printString += String(uR);
+    printString += "uA: ";
+    printString += String(uA);
+    printString += ", uB: ";
+    printString += String(uB);
+    printString += ", uC: ";
+    printString += String(uC);
   } 
   return printString;
 }
@@ -150,8 +156,9 @@ void SurfaceControl::updatePoint(float x, float y) {
     }
     if (currentWayPoint == totalWayPoints) {
       changingWPMessage = "Completed the surface path.";
-      uR=0;
-      uL=0;
+      uA=0;
+      uB=0;
+      uC=0;
       complete = 1;
       cwpmTime = 10;
     }
@@ -161,9 +168,9 @@ void SurfaceControl::updatePoint(float x, float y) {
 
 size_t SurfaceControl::writeDataBytes(unsigned char * buffer, size_t idx) {
   float * data_slot = (float *) &buffer[idx];
-  data_slot[0] = u;
-  data_slot[1] = uL;
-  data_slot[2] = uR;
+  data_slot[0] = uA;
+  data_slot[1] = uB;
+  data_slot[2] = uC;
   data_slot[3] = yaw;
   data_slot[4] = yaw_des;
   return idx + 5*sizeof(float);
