@@ -50,7 +50,7 @@ void SurfaceControl::navigate(xy_state_t * state, gps_state_t * gps_state_p, int
 
     // control uA, uB, uC, turn motors on to 80 if not at way point, stop at way point
     uA = 80;
-    uB = 80;
+    uB = 90;
     uC = 80;
 
     // Set the values of yaw_des, yaw, yaw_error, control effort (u), uL, and uR appropriately for P control

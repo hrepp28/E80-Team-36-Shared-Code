@@ -73,8 +73,9 @@ void setup() {
 
   int navigateDelay = 10000; // how long robot will stay at surface waypoint before continuing (ms)
 
-  const int num_surface_waypoints = 3; // Number of ordered pairs of surface waypoints. (e.g., if surface_waypoints is {x0,y0,x1,y1} then num_surface_waypoints is 2.) Set to 0 if only doing depth control 
-  double surface_waypoints [] = { 0, -40, 0, -20, 0, 0 };   // listed as x0,y0,x1,y1, ... etc.
+  const int num_surface_waypoints = 0; // Number of ordered pairs of surface waypoints. (e.g., if surface_waypoints is {x0,y0,x1,y1} then num_surface_waypoints is 2.) Set to 0 if only doing depth control 
+  double surface_waypoints [] = { 0, 0, 0, -1, 0, -2 };   // listed as x0,y0,x1,y1, ... etc.
+  
   surface_control.init(num_surface_waypoints, surface_waypoints, navigateDelay);
   
   xy_state_estimator.init(); 
@@ -89,7 +90,6 @@ void setup() {
   xy_state_estimator.lastExecutionTime = loopStartTime - LOOP_PERIOD + XY_STATE_ESTIMATOR_LOOP_OFFSET;
   surface_control.lastExecutionTime    = loopStartTime - LOOP_PERIOD + SURFACE_CONTROL_LOOP_OFFSET;
   logger.lastExecutionTime             = loopStartTime - LOOP_PERIOD + LOGGER_LOOP_OFFSET;
-
 }
 
 
@@ -113,20 +113,18 @@ void loop() {
     printer.printToSerial();  // To stop printing, just comment this line out
   }
 
-  /// SURFACE CONTROL FINITE STATE MACHINE///
+
+  /// SURFACE CONTROL///
   if ( currentTime-surface_control.lastExecutionTime > LOOP_PERIOD ) {
     surface_control.lastExecutionTime = currentTime;
-    if ( surface_control.navigateState ) { // NAVIGATE STATE //
-      if ( !surface_control.atPoint ) { 
-        surface_control.navigate(&xy_state_estimator.state, &gps.state, currentTime);
-      }
-      else if ( surface_control.complete ) { 
-        delete[] surface_control.wayPoints; // destroy surface waypoint array from the Heap
-      }
-      else {
-        surface_control.atPoint = false;   // get ready to go to the next point
-      }
-      motor_driver.drive(surface_control.uA,surface_control.uB,surface_control.uC);
+    int diff = currentTime - surface_control.motorLastExecutionTime;
+    if (diff < 15000) { // Stops for 15 seconds to collect data
+      motor_driver.drive(0, 0, 0);
+    }
+    else if (diff < 25000) { // drives for 10 seconds
+      motor_driver.drive(80, 100, 100);
+    } else {
+      surface_control.motorLastExecutionTime = currentTime;
     }
   }
   

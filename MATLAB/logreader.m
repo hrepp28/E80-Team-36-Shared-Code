@@ -4,7 +4,7 @@
 clear;
 %clf;
 
-filenum = '012'; % file number for the data you want to read
+filenum = '086'; % file number for the data you want to read
 infofile = strcat('INF', filenum, '.TXT');
 datafile = strcat('LOG', filenum, '.BIN');
 
@@ -46,6 +46,29 @@ end
 fclose(fid);
 
 %% Process your data here
+temperature = single(A00).*3.3./1024.0;
+pH = single(A01).*3.3./1024.0;
+ninety = single(A02).*3.3./1024.0;
+oneEighty = single(A03).*3.3./1024;
 
+clf
+figure(1)
+plot(temperature)
+title('Temperature')
 
+figure(2)
+plot(pH)
+title('pH')
 
+figure(3)
+plot(ninety)
+title('90 degrees Turbidity')
+
+figure(4)
+plot(oneEighty)
+title('180 degrees Turbidity')
+
+figure(5)
+
+plot(x, y, '*')
+xlim([600 680]);

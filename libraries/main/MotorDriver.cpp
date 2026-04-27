@@ -5,6 +5,7 @@
 // Erik Spjut August 2021.
 #include "MotorDriver.h"
 #include "Printer.h"
+#include <iostream>
 extern Printer printer;
 
 MotorDriver::MotorDriver()

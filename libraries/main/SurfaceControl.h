@@ -27,6 +27,7 @@ public:
   size_t writeDataBytes(unsigned char * buffer, size_t idx);
 
   int lastExecutionTime = -1;
+  int motorLastExecutionTime = -1;
 
   // control fields
   float yaw_des;         // desired yaw
